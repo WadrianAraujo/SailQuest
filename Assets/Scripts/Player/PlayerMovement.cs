@@ -8,7 +8,8 @@ namespace Game.Player
         [SerializeField] private float maxSpeed = 5f;
         [SerializeField] private float acceleration = 2f;
         [SerializeField] private float drag = 0.1f;
-
+        [SerializeField] private float rotationSpeed = 180f;
+        
         private Rigidbody2D _rigidbody2Drb;
         private float currentSpeed;
         private float currentAngle;
@@ -16,7 +17,6 @@ namespace Game.Player
         void Start()
         {
             _rigidbody2Drb = GetComponent<Rigidbody2D>();
-            _rigidbody2Drb.gravityScale = 0f; // Disable gravity for 2D movement
             _rigidbody2Drb.drag = drag;
         }
 
@@ -34,7 +34,7 @@ namespace Game.Player
 
         void UpdateRotation(float rotation)
         {
-            currentAngle += rotation * Time.deltaTime * acceleration;
+            currentAngle += rotation * rotationSpeed * Time.deltaTime;
             transform.rotation = Quaternion.Euler(0, 0, currentAngle);
         }
 
