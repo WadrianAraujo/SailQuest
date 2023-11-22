@@ -14,10 +14,6 @@ namespace Game.Player
         [SerializeField] private float frontCooldownTime;
         [SerializeField] private float sideCooldownTime;
         
-        [Header("UI Recharge")]
-        [SerializeField] private Image frontCooldownFillImage;
-        [SerializeField] private Image sideCooldownFillImage;
-        
         private ObjectPooler objectPooler;
         
         private float frontCooldownTimer = 0f;
@@ -41,26 +37,22 @@ namespace Game.Player
             if (!canShootFront)
             {
                 frontCooldownTimer += Time.deltaTime;
-                frontCooldownFillImage.fillAmount = frontCooldownTimer / frontCooldownTime;
 
                 if (frontCooldownTimer >= frontCooldownTime)
                 {
                     frontCooldownTimer = 0f;
                     canShootFront = true;
-                    frontCooldownFillImage.fillAmount = 0f;
                 }
             }
 
             if (!canShootSide)
             {
                 sideCooldownTimer += Time.deltaTime;
-                sideCooldownFillImage.fillAmount = sideCooldownTimer / sideCooldownTime;
 
                 if (sideCooldownTimer >= sideCooldownTime)
                 {
                     sideCooldownTimer = 0f;
                     canShootSide = true;
-                    sideCooldownFillImage.fillAmount = 0f;
                 }
             }
         }

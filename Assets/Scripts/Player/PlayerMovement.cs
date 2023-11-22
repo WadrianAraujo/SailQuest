@@ -9,40 +9,58 @@ namespace Game.Player
         [SerializeField] private float acceleration = 2f;
         [SerializeField] private float drag = 0.1f;
         [SerializeField] private float rotationSpeed = 180f;
-        
+
         private Rigidbody2D _rigidbody2Drb;
         private float currentSpeed;
         private float currentAngle;
 
-        void Start()
+        private void Start()
+        {
+            InitializeComponents();
+        }
+
+        private void FixedUpdate()
+        {
+            HandleInput();
+            ApplyForces();
+        }
+
+        private void InitializeComponents()
         {
             _rigidbody2Drb = GetComponent<Rigidbody2D>();
             _rigidbody2Drb.drag = drag;
         }
 
-        void FixedUpdate()
+        private void HandleInput()
         {
             float rotation = -Input.GetAxis("Horizontal");
             float movement = Input.GetAxis("Vertical");
-            
+
             UpdateRotation(rotation);
             UpdateSpeed(movement);
-            
-            Vector2 force = transform.up * (currentSpeed * acceleration);
-            _rigidbody2Drb.AddForce(force);
         }
 
-        void UpdateRotation(float rotation)
+        private void UpdateRotation(float rotationInput)
         {
-            currentAngle += rotation * rotationSpeed * Time.deltaTime;
+            currentAngle += rotationInput * rotationSpeed * Time.deltaTime;
             transform.rotation = Quaternion.Euler(0, 0, currentAngle);
         }
 
-        void UpdateSpeed(float movement)
+        private void UpdateSpeed(float movementInput)
         {
-            currentSpeed += movement * acceleration * Time.deltaTime;
+            currentSpeed += movementInput * acceleration * Time.deltaTime;
             currentSpeed = Mathf.Clamp(currentSpeed, -maxSpeed, maxSpeed);
+            
+            if (movementInput == 0f)
+            {
+                currentSpeed *= 1f - drag * Time.deltaTime;
+            }
+        }
+
+        private void ApplyForces()
+        {
+            Vector2 force = transform.up * (currentSpeed * acceleration);
+            _rigidbody2Drb.AddForce(force);
         }
     }
 }
-
